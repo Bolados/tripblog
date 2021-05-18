@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% load static humanize %}
+
+{% block title %}
+    Blog List
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <!-- Latest Posts -->
+            <main class="posts-listing col-lg-8">
+                <div class="container">
+                    <div class="row">
+                        <!-- post -->
+                        {% for object in object_list %}
+                            <div class="post col-xl-6">
+                                <div class="post-thumbnail">
+                                    <a href="{% url 'post_detail' object.slug %}">
+                                        {% if object.featured_image %}
+                                            <img src="{{ object.featured_image.url }}" alt="..." class="img-fluid">
+                                        {% else %}
+                                            <img src="{% static 'img/blog-post-4.jpeg' %}" alt="..." class="img-fluid">
+                                        {% endif %}
+                                    </a>
+                                </div>
+                                <div class="post-details">
+                                    <div class="post-meta d-flex justify-content-between">
+                                        <div class="date meta-last">{{ object.created_on|date:"d M" }}
+                                            | {{ object.created_on|date:"Y" }}</div>
+                                        <div class="category"><a href="#">{{ object.category }}</a></div>
+                                    </div>
+                                    <a href="{% url 'post_detail' object.slug %}">
+                                        <h3 class="h4">{{ object.title }}</h3></a>
+                                    <p class="text-muted"> {{ object.content|truncatechars:100 }}</p>
+                                    <div class="post-footer d-flex align-items-center">
+                                        <a href="#" class="author d-flex align-items-center flex-wrap">
+                                            <div class="avatar"><img src="{% static 'img/avatar-1.jpg' %}" alt="..."
+                                                                     class="img-fluid">
+                                            </div>
+                                            <div class="title"><span>{{ object.user.get_full_name }}</span></div>
+                                        </a>
+                                        <div class="date"><i class="icon-clock"></i>{{ object.created_on|naturaltime }}
+                                        </div>
+                                        <div class="comments meta-last"><i class="icon-comment"></i>{{ object.id }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination pagination-template d-flex justify-content-center">
+                            <li class="page-item"><a href="#" class="page-link"> <i class="fa fa-angle-left"></i></a>
+                            </li>
+                            <li class="page-item"><a href="#" class="page-link active">1</a></li>
+                            <li class="page-item"><a href="#" class="page-link">2</a></li>
+                            <li class="page-item"><a href="#" class="page-link">3</a></li>
+                            <li class="page-item"><a href="#" class="page-link"> <i class="fa fa-angle-right"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </main>
+            <aside class="col-lg-4">
+                <!-- Widget [Search Bar Widget]-->
+                <div class="widget search">
+                    <header>
+                        <h3 class="h6">Search the blog</h3>
+                    </header>
+                    <form action="#" class="search-form">
+                        <div class="form-group">
+                            <input type="search" placeholder="What are you looking for?">
+                            <button type="submit" class="submit"><i class="icon-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+                <!-- Widget [Latest Posts Widget]        -->
+                <div class="widget latest-posts">
+                    <header>
+                        <h3 class="h6">Latest Posts</h3>
+                    </header>
+                    <div class="blog-posts">
+                        {% for post in latest_posts %}
+                            <a href="#">
+                                <div class="item d-flex align-items-center">
+                                    <div class="image">
+                                        {% if post.featured_image %}
+                                            <img src="{{ post.featured_image.url }}" alt="..." class="img-fluid">
+                                        {% else %}
+                                            <img src="{% static 'img/small-thumbnail-1.jpg' %}" alt="..." class="img-fluid">
+                                        {% endif %}
+                                    </div>
+                                    <div class="title"><strong>{{ post.title }}</strong>
+                                        <div class="d-flex align-items-center">
+                                            <div class="views"><i class="icon-eye"></i> 500</div>
+                                            <div class="comments"><i class="icon-comment"></i>12</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+
+                    </div>
+                </div>
+                <!-- Widget [Categories Widget]-->
+                <div class="widget categories">
+                    <header>
+                        <h3 class="h6">Categories</h3>
+                    </header>
+                    {% for category in categories %}
+                        <div class="item d-flex justify-content-between"><a href="#">{{ category }}</a><span>12</span></div>
+                    {% endfor %}
+
+                </div>
+                <!-- Widget [Tags Cloud Widget]-->
+                <div class="widget tags">
+                    <header>
+                        <h3 class="h6">Tags</h3>
+                    </header>
+                    <ul class="list-inline">
+                       {% for tag in tags %}
+                            <li class="list-inline-item"><a href="#" class="tag">{{ tag }}</a></li>
+                       {% endfor %}
+
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </div>
+{% endblock %}
